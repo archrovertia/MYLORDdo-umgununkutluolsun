@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haybado İçin Ayçiçeği Tarlası</title>
+  <style>
+    :root {
+      --bg-dark: #12100e;
+      --sun-yellow: #ffc107;
+      --sun-orange: #ff9800;
+      --sun-center: #3e2723;
+      --stem-green: #33691e;
+      --glass: rgba(20, 15, 10, 0.6);
+      --text-light: #fff3e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--text-light);
+      background: radial-gradient(circle at 50% 50%, #2c251d 0%, var(--bg-dark) 100%);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .intro-text {
+      position: absolute;
+      top: 15vh;
+      text-align: center;
+      transition: opacity 0.8s ease;
+    }
+
+    .intro-text h1 {
+      font-size: clamp(28px, 5vw, 54px);
+      margin: 0 0 10px;
+      font-weight: normal;
+      color: var(--sun-yellow);
+    }
+
+    .intro-text p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .intro-text.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Ayçiçeği Tasarımı */
+    .sunflower-btn {
+      position: relative;
+      width: 200px;
+      height: 350px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      margin-top: 10vh;
+    }
+
+    .stem {
+      position: absolute;
+      bottom: 0;
+      width: 12px;
+      height: 200px;
+      background: linear-gradient(90deg, #1b3a0f, var(--stem-green), #1b3a0f);
+      border-radius: 6px;
+      transition: opacity 0.5s ease;
+    }
+
+    .flower-head {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin-top: 20px;
+      z-index: 2;
+    }
+
+    .petal {
+      position: absolute;
+      top: -15px;
+      bottom: -15px;
+      left: 60px;
+      right: 60px;
+      background: linear-gradient(180deg, var(--sun-yellow), var(--sun-orange));
+      border-radius: 50%;
+      transform: rotate(var(--r));
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .center {
+      position: absolute;
+      inset: 35px;
+      background: radial-gradient(circle, #5d4037 0%, var(--sun-center) 70%, #1e110d 100%);
+      border-radius: 50%;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    .center::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-radial-gradient(circle, transparent 0, transparent 2px, rgba(0,0,0,0.3) 3px, transparent 4px);
+      border-radius: 50%;
+    }
+
+    .sunflower-btn.spinning .flower-head {
+      animation: crazy-spin 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+    }
+
+    .sunflower-btn.spinning .stem {
+      opacity: 0;
+    }
+
+    /* Final Kartı */
+    .final {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: clamp(12px, 2.6vw, 30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      background: #000;
+    }
+
+    .final.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .final-card {
+      position: relative;
+      width: min(1000px, 94vw);
+      min-height: min(700px, 88vh);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      background-image: linear-gradient(to bottom, rgba(15, 10, 5, 0.3), rgba(15, 10, 5, 0.85)), url('arkaplan.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px;
+    }
+
+    .birthday-text {
+      max-width: 600px;
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 193, 7, 0.2);
+    }
+
+    .birthday-text h2 {
+      margin: 0 0 15px;
+      font-size: 32px;
+      color: var(--sun-yellow);
+    }
+
+    .birthday-text p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 0 0 10px;
+    }
+
+    .gifts-section {
+      align-self: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+      max-width: 500px;
+    }
+
+    .gifts-title {
+      width: 100%;
+      text-align: right;
+      font-style: italic;
+      color: #ffcc80;
+      margin-bottom: 5px;
+    }
+
+    .gift-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--sun-orange);
+      color: var(--text-light);
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 16px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+    }
+
+    .gift-btn:hover {
+      background: var(--sun-orange);
+      color: #000;
+      transform: translateY(-3px);
+    }
+
+    /* Hediye Popup */
+    .gift-pop {
+      position: absolute;
+      right: 40px;
+      bottom: 120px;
+      width: min(340px, 80vw);
+      padding: 20px;
+      background: rgba(20, 15, 10, 0.95);
+      border: 1px solid var(--sun-yellow);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .gift-pop.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .gift-pop h3 {
+      margin: 0 0 10px;
+      color: var(--sun-yellow);
+      font-size: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 8px;
+    }
+
+    .gift-pop p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #e0e0e0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    @keyframes crazy-spin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(360deg) scale(1.2); }
+      100% { transform: rotate(1080deg) scale(0); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .final-card {
+        padding: 20px;
+        justify-content: flex-start;
+      }
+      .birthday-text {
+        margin-bottom: 30px;
+      }
+      .gifts-section {
+        align-self: center;
+        justify-content: center;
+      }
+      .gifts-title {
+        text-align: center;
+      }
+      .gift-pop {
+        right: 50%;
+        bottom: 50%;
+        transform: translate(50%, 50%) scale(0.9);
+      }
+      .gift-pop.show {
+        transform: translate(50%, 50%) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="wrap">
+    <div class="intro-text" id="introText">
+      <h1>Haybado İçin</h1>
+      <p>Ayçiçeğine dokun ve sırrı keşfet...</p>
+    </div>
+
+    <button class="sunflower-btn" id="sunflower" type="button">
+      <div class="flower-head">
+        <div class="petal" style="--r: 0deg"></div>
+        <div class="petal" style="--r: 30deg"></div>
+        <div class="petal" style="--r: 60deg"></div>
+        <div class="petal" style="--r: 90deg"></div>
+        <div class="petal" style="--r: 120deg"></div>
+        <div class="petal" style="--r: 150deg"></div>
+        <div class="center"></div>
+      </div>
+      <div class="stem"></div>
+    </button>
+  </main>
+
+  <section class="final" id="finalScene">
+    <div class="final-card">
+      
+      <div class="birthday-text">
+        <h2>İyi ki Doğdun Haybado!</h2>
+        <p>Günebakanlar nasıl her sabah inatla yüzünü güneşe dönerse, senin de o güzel enerjin ve farklı ruhun hep ışığa dönük olsun.</p>
+        <p>Bugün senin günün. Senin için hazırlanan bu gizemli bahçede kaybolmaya hazır mısın?</p>
+      </div>
+
+      <div class="gifts-section">
+        <div class="gifts-title">Dijital Hediyelerin...</div>
+        <button class="gift-btn" data-gift="music">Marjinal Müzik</button>
+        <button class="gift-btn" data-gift="somali">Somali Sırrı</button>
+        <button class="gift-btn" data-gift="cibuti">Cibuti Gizemi</button>
+        <button class="gift-btn" data-gift="karabuk">Karabük Kaçamağı</button>
+      </div>
+
+      <div class="gift-pop" id="giftPop">
+        <button class="close-btn" id="closePop">×</button>
+        <h3 id="giftTitle">Başlık</h3>
+        <p id="giftText">Metin buraya gelecek.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <audio id="bgMusic" preload="auto">
+    <source src="(Synthesia) Romantic Happy Birthday (arr. Miranda Wong) _ Piano Cover by Seander Alfonsus [GSXbKmMDqPs].mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const sunflower = document.getElementById('sunflower');
+    const introText = document.getElementById('introText');
+    const finalScene = document.getElementById('finalScene');
+    const bgMusic = document.getElementById('bgMusic');
+    
+    const giftBtns = document.querySelectorAll('.gift-btn');
+    const giftPop = document.getElementById('giftPop');
+    const closePop = document.getElementById('closePop');
+    const giftTitle = document.getElementById('giftTitle');
+    const giftText = document.getElementById('giftText');
+
+    const giftsData = {
+      music: {
+        title: "Karanlık ve Büyülü Notalar",
+        text: "Tam senin vibe'ına uygun: Molchat Doma'dan 'Sudno' veya Lebanon Hanover'dan 'Gallowdance'. Aradığın o karanlık, gizemli ve hafif post-punk ruhu bu notalarda gizli. Kulaklığını tak ve bu perili ses akışına kendini bırak."
+      },
+      somali: {
+        title: "Somali Sırrı: Xamar Weyne",
+        text: "Mogadişu'nun dar sokaklarında, okyanus rüzgarının dövdüğü terk edilmiş eski bir mercan taşı konağın alt katı. Burası sadece kulaktan kulağa yayılan isimsiz bir kütüphane-kafe. Duvarlardaki deniz tuzu kokusu ve eski el yazmalarının hışırtısı sana tam aradığın o perili hissi verecek."
+      },
+      cibuti: {
+        title: "Cibuti Gizemi: Gare de l'Ombre",
+        text: "Eski Fransız demiryolu istasyonunun hemen arkasında, kızgın çöl güneşinin altında unutulmuş paslı bir tren vagonu. Bu vagon aslında kimsenin bilmediği bir kafe. Çöl rüzgarı sac levhalara çarptıkça çıkan o ıslık sesi tüyler ürpertici ama bir o kadar da huzurlu."
+      },
+      karabuk: {
+        title: "Karabük Kaçamağı",
+        text: "Safranbolu'nun o dik yokuşlu sokaklarında, eğimli bir araziye kurulmuş eski ahşap bir konak. Zemini her adımda gıcırdayan bu isimsiz sahaf kafe, tıpkı Hadrianapolis'in kalıntıları gibi zamanın durduğu, gizemli ve hafif ürpertici bir yer. Tam bir hayalet hikayesi mekanı."
+      }
+    };
+
+    sunflower.addEventListener('click', () => {
+      // Çiçeği döndür ve yazıyı gizle
+      sunflower.classList.add('spinning');
+      introText.classList.add('hide');
+
+      // Animasyon bitiminde final kartını aç
+      setTimeout(() => {
+        sunflower.style.display = 'none';
+        finalScene.classList.add('show');
+        
+        // Müziği yumuşak bir şekilde başlat
+        bgMusic.volume = 0;
+        bgMusic.play().then(() => {
+          let vol = 0;
+          let fadeInterval = setInterval(() => {
+            if (vol < 0.8) {
+              vol += 0.05;
+              bgMusic.volume = vol;
+            } else {
+              clearInterval(fadeInterval);
+            }
+          }, 150);
+        }).catch(err => console.log("Otomatik oynatma tarayıcı tarafından engellendi.", err));
+        
+      }, 1500); // Dönme animasyonu süresi
+    });
+
+    // Hediye butonları mantığı
+    giftBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-gift');
+        giftTitle.textContent = giftsData[key].title;
+        giftText.textContent = giftsData[key].text;
+        giftPop.classList.add('show');
+      });
+    });
+
+    closePop.addEventListener('click', () => {
+      giftPop.classList.remove('show');
+    });
+
+  </script>
+</body>
+</html>
