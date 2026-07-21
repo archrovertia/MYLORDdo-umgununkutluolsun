@@ -131,7 +131,7 @@
       opacity: 0;
     }
 
-    /* Final Kartı */
+    /* Final Sahnesi */
     .final {
       position: fixed;
       inset: 0;
@@ -157,119 +157,167 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-      background-image: linear-gradient(to bottom, rgba(15, 10, 5, 0.3), rgba(15, 10, 5, 0.85)), url('arkaplan.jpg');
+      background-image: url('arkaplan.jpeg');
       background-size: cover;
       background-position: center;
+    }
+
+    /* Karanlık Perde (Yazı Ekranı) */
+    .overlay-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 9, 5, 0.96);
+      backdrop-filter: blur(12px);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
       padding: 40px;
+      z-index: 20;
+      transition: opacity 1.5s ease;
     }
 
-    .birthday-text {
-      max-width: 600px;
-      background: var(--glass);
-      backdrop-filter: blur(8px);
-      padding: 30px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 193, 7, 0.2);
-    }
-
-    .birthday-text h2 {
-      margin: 0 0 15px;
-      font-size: 32px;
-      color: var(--sun-yellow);
-    }
-
-    .birthday-text p {
-      font-size: 18px;
-      line-height: 1.6;
-      margin: 0 0 10px;
-    }
-
-    .gifts-section {
-      align-self: flex-end;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-end;
-      max-width: 500px;
-    }
-
-    .gifts-title {
-      width: 100%;
-      text-align: right;
-      font-style: italic;
-      color: #ffcc80;
-      margin-bottom: 5px;
-    }
-
-    .gift-btn {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--sun-orange);
-      color: var(--text-light);
-      padding: 10px 18px;
-      border-radius: 20px;
-      font-family: inherit;
-      font-size: 16px;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-      transition: all 0.3s ease;
-    }
-
-    .gift-btn:hover {
-      background: var(--sun-orange);
-      color: #000;
-      transform: translateY(-3px);
-    }
-
-    /* Hediye Popup */
-    .gift-pop {
-      position: absolute;
-      right: 40px;
-      bottom: 120px;
-      width: min(340px, 80vw);
-      padding: 20px;
-      background: rgba(20, 15, 10, 0.95);
-      border: 1px solid var(--sun-yellow);
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    .overlay-screen.hidden {
       opacity: 0;
-      transform: translateY(20px);
       pointer-events: none;
+    }
+
+    .overlay-screen h2 {
+      margin: 0 0 20px;
+      font-size: clamp(32px, 4vw, 48px);
+      color: var(--sun-yellow);
+      text-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+    }
+
+    .overlay-screen p {
+      font-size: clamp(18px, 2.5vw, 24px);
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 0 30px;
+      color: #eaeaea;
+    }
+
+    .choices {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .choice-btn {
+      background: transparent;
+      border: 1px solid var(--sun-yellow);
+      color: var(--sun-yellow);
+      padding: 12px 35px;
+      border-radius: 30px;
+      font-family: inherit;
+      font-size: 20px;
+      cursor: pointer;
       transition: all 0.3s ease;
+    }
+
+    .choice-btn:hover {
+      background: var(--sun-yellow);
+      color: #000;
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+    }
+
+    /* Gizemli Bahçe Sürprizi (Ateş Böceği) */
+    .magic-orb {
+      position: absolute;
+      right: 15%;
+      bottom: 25%;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff3e0;
+      box-shadow: 0 0 15px #ffc107, 0 0 30px #ff9800, inset 0 0 10px #fff;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      animation: float-orb 3s ease-in-out infinite;
+      transition: opacity 1.5s ease 1s; /* Perde kalktıktan 1 saniye sonra belirir */
       z-index: 10;
     }
 
-    .gift-pop.show {
+    .magic-orb.show {
       opacity: 1;
-      transform: translateY(0);
       pointer-events: auto;
     }
 
-    .gift-pop h3 {
-      margin: 0 0 10px;
+    .magic-orb::after {
+      content: "Bana dokun";
+      position: absolute;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
       color: var(--sun-yellow);
-      font-size: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 8px;
+      font-size: 15px;
+      font-style: italic;
+      white-space: nowrap;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      opacity: 0.8;
     }
 
-    .gift-pop p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.5;
+    @keyframes float-orb {
+      0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 15px #ffc107, 0 0 30px #ff9800; }
+      50% { transform: translateY(-15px) scale(1.1); box-shadow: 0 0 25px #ffc107, 0 0 50px #ff9800; }
+    }
+
+    /* Sürpriz Popup */
+    .surprise-pop {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -45%);
+      width: min(500px, 90vw);
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 30px;
+      background: rgba(15, 10, 5, 0.95);
+      border: 1px solid var(--sun-orange);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      z-index: 30;
       color: #e0e0e0;
     }
 
-    .close-btn {
+    .surprise-pop.show {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+
+    .surprise-pop h3 {
+      margin: 0 0 15px;
+      color: var(--sun-yellow);
+      font-size: 26px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    .surprise-pop p {
+      margin: 0 0 15px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .surprise-pop strong {
+      color: #ffcc80;
+    }
+
+    .close-pop {
       position: absolute;
-      top: 10px;
-      right: 15px;
+      top: 15px;
+      right: 20px;
       background: transparent;
       border: none;
       color: #fff;
-      font-size: 20px;
+      font-size: 28px;
       cursor: pointer;
     }
 
@@ -280,28 +328,9 @@
     }
 
     @media (max-width: 768px) {
-      .final-card {
-        padding: 20px;
-        justify-content: flex-start;
-      }
-      .birthday-text {
-        margin-bottom: 30px;
-      }
-      .gifts-section {
-        align-self: center;
-        justify-content: center;
-      }
-      .gifts-title {
-        text-align: center;
-      }
-      .gift-pop {
-        right: 50%;
-        bottom: 50%;
-        transform: translate(50%, 50%) scale(0.9);
-      }
-      .gift-pop.show {
-        transform: translate(50%, 50%) scale(1);
-      }
+      .overlay-screen { padding: 20px; }
+      .choice-btn { padding: 10px 25px; font-size: 18px; }
+      .magic-orb { right: 50%; transform: translateX(50%); bottom: 15%; }
     }
   </style>
 </head>
@@ -330,31 +359,36 @@
   <section class="final" id="finalScene">
     <div class="final-card">
       
-      <div class="birthday-text">
+      <!-- Karanlık Perde ve Karar Ekranı -->
+      <div class="overlay-screen" id="overlayScreen">
         <h2>İyi ki Doğdun Haybado!</h2>
-        <p>Günebakanlar nasıl her sabah inatla yüzünü güneşe dönerse, senin de o güzel enerjin ve farklı ruhun hep ışığa dönük olsun.</p>
-        <p>Bugün senin günün. Senin için hazırlanan bu gizemli bahçede kaybolmaya hazır mısın?</p>
+        <p id="questionText">Günebakanlar nasıl her sabah inatla yüzünü güneşe dönerse, senin de o güzel enerjin ve farklı ruhun hep ışığa dönük olsun.<br><br>Bugün senin günün. Senin için hazırlanan bu gizemli bahçede kaybolmaya hazır mısın?</p>
+        
+        <div class="choices" id="choicesDiv">
+          <button class="choice-btn" id="btnYes">Evet</button>
+          <button class="choice-btn" id="btnNo">Hayır</button>
+        </div>
       </div>
 
-      <div class="gifts-section">
-        <div class="gifts-title">Dijital Hediyelerin...</div>
-        <button class="gift-btn" data-gift="music">Marjinal Müzik</button>
-        <button class="gift-btn" data-gift="somali">Somali Sırrı</button>
-        <button class="gift-btn" data-gift="cibuti">Cibuti Gizemi</button>
-        <button class="gift-btn" data-gift="karabuk">Karabük Kaçamağı</button>
-      </div>
+      <!-- Bahçedeki Sürpriz Işık -->
+      <div class="magic-orb" id="magicOrb"></div>
 
-      <div class="gift-pop" id="giftPop">
-        <button class="close-btn" id="closePop">×</button>
-        <h3 id="giftTitle">Başlık</h3>
-        <p id="giftText">Metin buraya gelecek.</p>
+      <!-- Tıklanınca Açılacak Sır Parşömeni -->
+      <div class="surprise-pop" id="surprisePop">
+        <button class="close-pop" id="closePop">×</button>
+        <h3>Bahçenin Fısıltıları</h3>
+        <p>Gizemli bahçeye adım attın. Burası sadece senin frekansında titreşen sırlar barındırıyor...</p>
+        <p><strong>Karanlık Notalar:</strong> Tam senin vibe'ına uygun; Molchat Doma'dan 'Sudno' veya Lebanon Hanover'dan 'Gallowdance'. Aradığın o karanlık ve hafif post-punk ruhu bu notalarda gizli.</p>
+        <p><strong>Somali Sırrı:</strong> Xamar Weyne'de okyanus rüzgarının dövdüğü terk edilmiş bir konağın alt katındaki isimsiz, sadece fısıltıyla yayılan o kütüphane-kafe.</p>
+        <p><strong>Cibuti Gizemi:</strong> Gare de l'Ombre. Çöl güneşinin altında unutulmuş paslı bir tren vagonunda rüzgarın tüyler ürperten ama huzur veren o ıslığı.</p>
+        <p><strong>Karabük Kaçamağı:</strong> Safranbolu'nun yokuşlu sokaklarında, zemini her adımda gıcırdayan, zamanın durduğu o isimsiz sahaf kafe. Tam bir hayalet hikayesi mekanı.</p>
       </div>
 
     </div>
   </section>
 
   <audio id="bgMusic" preload="auto">
-    <source src="(Synthesia) Romantic Happy Birthday (arr. Miranda Wong) _ Piano Cover by Seander Alfonsus [GSXbKmMDqPs].mp3" type="audio/mpeg">
+    <source src="haybado-muzik.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -363,70 +397,71 @@
     const finalScene = document.getElementById('finalScene');
     const bgMusic = document.getElementById('bgMusic');
     
-    const giftBtns = document.querySelectorAll('.gift-btn');
-    const giftPop = document.getElementById('giftPop');
+    const overlayScreen = document.getElementById('overlayScreen');
+    const questionText = document.getElementById('questionText');
+    const choicesDiv = document.getElementById('choicesDiv');
+    const btnYes = document.getElementById('btnYes');
+    const btnNo = document.getElementById('btnNo');
+    
+    const magicOrb = document.getElementById('magicOrb');
+    const surprisePop = document.getElementById('surprisePop');
     const closePop = document.getElementById('closePop');
-    const giftTitle = document.getElementById('giftTitle');
-    const giftText = document.getElementById('giftText');
 
-    const giftsData = {
-      music: {
-        title: "Karanlık ve Büyülü Notalar",
-        text: "Tam senin vibe'ına uygun: Molchat Doma'dan 'Sudno' veya Lebanon Hanover'dan 'Gallowdance'. Aradığın o karanlık, gizemli ve hafif post-punk ruhu bu notalarda gizli. Kulaklığını tak ve bu perili ses akışına kendini bırak."
-      },
-      somali: {
-        title: "Somali Sırrı: Xamar Weyne",
-        text: "Mogadişu'nun dar sokaklarında, okyanus rüzgarının dövdüğü terk edilmiş eski bir mercan taşı konağın alt katı. Burası sadece kulaktan kulağa yayılan isimsiz bir kütüphane-kafe. Duvarlardaki deniz tuzu kokusu ve eski el yazmalarının hışırtısı sana tam aradığın o perili hissi verecek."
-      },
-      cibuti: {
-        title: "Cibuti Gizemi: Gare de l'Ombre",
-        text: "Eski Fransız demiryolu istasyonunun hemen arkasında, kızgın çöl güneşinin altında unutulmuş paslı bir tren vagonu. Bu vagon aslında kimsenin bilmediği bir kafe. Çöl rüzgarı sac levhalara çarptıkça çıkan o ıslık sesi tüyler ürpertici ama bir o kadar da huzurlu."
-      },
-      karabuk: {
-        title: "Karabük Kaçamağı",
-        text: "Safranbolu'nun o dik yokuşlu sokaklarında, eğimli bir araziye kurulmuş eski ahşap bir konak. Zemini her adımda gıcırdayan bu isimsiz sahaf kafe, tıpkı Hadrianapolis'in kalıntıları gibi zamanın durduğu, gizemli ve hafif ürpertici bir yer. Tam bir hayalet hikayesi mekanı."
-      }
-    };
-
+    // 1. Aşama: Çiçeğe tıklama
     sunflower.addEventListener('click', () => {
-      // Çiçeği döndür ve yazıyı gizle
       sunflower.classList.add('spinning');
       introText.classList.add('hide');
 
-      // Animasyon bitiminde final kartını aç
+      // Tarayıcı kısıtlamasına takılmamak için müziği arka planda sessizce başlatıyoruz
+      bgMusic.volume = 0; 
+      bgMusic.play().catch(err => console.log("Otomatik oynatma engellendi:", err));
+
       setTimeout(() => {
         sunflower.style.display = 'none';
         finalScene.classList.add('show');
         
-        // Müziği yumuşak bir şekilde başlat
-        bgMusic.volume = 0;
-        bgMusic.play().then(() => {
-          let vol = 0;
-          let fadeInterval = setInterval(() => {
-            if (vol < 0.8) {
-              vol += 0.05;
-              bgMusic.volume = vol;
-            } else {
-              clearInterval(fadeInterval);
-            }
-          }, 150);
-        }).catch(err => console.log("Otomatik oynatma tarayıcı tarafından engellendi.", err));
+        // Müzik sesini yavaş yavaş açıyoruz
+        let vol = 0;
+        let fadeInterval = setInterval(() => {
+          if (vol < 0.8) {
+            vol += 0.05;
+            bgMusic.volume = vol;
+          } else {
+            clearInterval(fadeInterval);
+          }
+        }, 150);
         
-      }, 1500); // Dönme animasyonu süresi
+      }, 1500); 
     });
 
-    // Hediye butonları mantığı
-    giftBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const key = btn.getAttribute('data-gift');
-        giftTitle.textContent = giftsData[key].title;
-        giftText.textContent = giftsData[key].text;
-        giftPop.classList.add('show');
-      });
+    // 2. Aşama: Gizemli Bahçeye Giriş (Evet veya Hayır)
+    function enterGarden() {
+      overlayScreen.classList.add('hidden');
+      magicOrb.classList.add('show');
+    }
+
+    btnYes.addEventListener('click', () => {
+      enterGarden();
+    });
+
+    btnNo.addEventListener('click', () => {
+      choicesDiv.style.display = 'none';
+      questionText.innerHTML = "Yanlışlıkla bastın sanırım...<br><br>Bunu 'Evet' olarak anlıyorum ve seni gizemli bahçeye sokuyorum 🌻";
+      questionText.style.color = "#ff9800";
+      
+      // 3.5 saniye sonra espriyi okutup bahçeyi açıyoruz
+      setTimeout(() => {
+        enterGarden();
+      }, 3500);
+    });
+
+    // 3. Aşama: Sürprize Tıklama
+    magicOrb.addEventListener('click', () => {
+      surprisePop.classList.add('show');
     });
 
     closePop.addEventListener('click', () => {
-      giftPop.classList.remove('show');
+      surprisePop.classList.remove('show');
     });
 
   </script>
